@@ -3,7 +3,7 @@
 	NBlock *programBlock; /* the top level root node of our final AST */
 	
 	extern int yylex();
-	void yyerror(const char *s) { printf("ERROR: %s\n", s);") }
+	void yyerror(const char *s) { printf("ERROR: %s\n", s); }
 %}
 
 /* Represents the many different ways we can access our data */
@@ -57,6 +57,7 @@ program	: stmts { programBlock = $1; }
 		;
 
 /* The first production creates an NBlock as its root node, then pushes the statement onto its stmt list vector */
+
 stmts	: stmt { $$ = new NBlock(); $$->statements.push_back($<stmt>1);}
 		| stmts stmt { $1->statements.push_back($<stmt>2); } /* adds stmt to the block $1 */
 		;
@@ -89,7 +90,7 @@ numeric	: TINTEGER { $$ = new NInteger(atol($1->c_str())); delete $1; }
 		;
 		
 expr	: ident TEQUAL expr { $$ = new NAssignment(*$<ident>1, *$3); }
-		| ident TLPAREN call_args TRPAREN { $$ = new NMethodCall(*$1, *3); delete $3; }
+		| ident TLPAREN call_args TRPAREN { $$ = new NMethodCall(*$1, *$3); delete $3; }
 		| ident { $<ident>$ = $1; } /* just an identifier by itself */
 		| numeric
 		| expr comparison expr { $$ = new NBinaryOperator(*$1, $2, *$3); }
@@ -97,7 +98,7 @@ expr	: ident TEQUAL expr { $$ = new NAssignment(*$<ident>1, *$3); }
 		;
 
 call_args	: /*blank*/ { $$ = new ExpressionList(); }
-			| expr { $$ = new ExpressionList(); $$-push_back($1); }
+			| expr { $$ = new ExpressionList(); $$->push_back($1); }
 			| call_args TCOMMA expr { $1->push_back($3); }
 			;
 
