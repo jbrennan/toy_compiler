@@ -471,8 +471,8 @@ char *yytext;
 	#include <string>
 	#include "node.h"
 	#include "parser.hpp"
-	#define SAVE_TOKEN yyval.string = new std::string(yytext, yyleng)
-	#define TOKEN(t) (yyval.token = t)
+	#define SAVE_TOKEN yylval.string = new std::string(yytext, yyleng)
+	#define TOKEN(t) (yylval.token = t)
 	extern "C" int yywrap() {}
 #line 478 "tokens.cpp"
 
@@ -766,7 +766,7 @@ SAVE_TOKEN; return TINTEGER;
 case 5:
 YY_RULE_SETUP
 #line 16 "tokens.l"
-return TOKEN(TEQUAL)
+return TOKEN(TEQUAL);
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
@@ -846,7 +846,7 @@ return TOKEN(TMUL);
 case 21:
 YY_RULE_SETUP
 #line 32 "tokens.l"
-return TOKEN(TDVI);
+return TOKEN(TDIV);
 	YY_BREAK
 case 22:
 YY_RULE_SETUP

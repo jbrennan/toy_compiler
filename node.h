@@ -9,7 +9,7 @@ class NVariableDeclaration;
 
 // Make some list types for our different nodes
 typedef std::vector<NStatement *> StatementList;
-typedef std::vector<NExpression *> ExpressionList
+typedef std::vector<NExpression *> ExpressionList;
 typedef std::vector<NVariableDeclaration *> VariableList;
 
 
@@ -22,7 +22,7 @@ public:
 
 
 class NExpression : public Node {};
-class NStatement : public Node () {};
+class NStatement : public Node {};
 
 class NInteger : public NExpression {
 public:
@@ -42,7 +42,7 @@ public:
 class NIdentifier : public NExpression {
 public:
 	std::string name;
-	NIdentifier(const std::string& name) : name(name);
+	NIdentifier(const std::string& name) : name(name) {}
 	virtual llvm::Value* codeGen(CodeGenContext& context);
 };
 
@@ -90,12 +90,12 @@ public:
 
 class NVariableDeclaration : public NStatement {
 public:
-	const NIdentifier& type
-	NIdentifier& id
+	const NIdentifier& type;
+	NIdentifier& id;
 	NExpression *assignmentExpression;
 	
 	NVariableDeclaration(const NIdentifier& type, NIdentifier& id) : type(type), id(id) {}
-	NVariableDeclaration(const NIdentifier& type, Nidentifier& id, NExpression *assignmentExpression) : type(type), id(id), assignmentExpression(assignmentExpression) {}
+	NVariableDeclaration(const NIdentifier& type, NIdentifier& id, NExpression *assignmentExpression) : type(type), id(id), assignmentExpression(assignmentExpression) {}
 	
 	virtual llvm::Value* codeGen(CodeGenContext& context);
 };

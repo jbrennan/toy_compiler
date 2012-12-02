@@ -69,7 +69,7 @@ block	: TLBRACE stmts TRBRACE { $$ = $2; }
 		;
 
 var_decl	: ident ident { $$ = new NVariableDeclaration(*$1, *$2); }
-			| ident ident TEQUAL expr { $$ = new NVariableDeclaration(*$1, *$2, *$4); }
+			| ident ident TEQUAL expr { $$ = new NVariableDeclaration(*$1, *$2, $4); }
 			;
 			
 func_decl	: ident ident TLPAREN func_decl_args TRPAREN block { $$ = new NFunctionDeclaration(*$1, *$2, *$4, *$6); delete $4;}

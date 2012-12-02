@@ -88,7 +88,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 12 "parser.y"
+#line 10 "parser.y"
 {
 	Node *node;
 	NBlock *block;
@@ -96,8 +96,8 @@ typedef union YYSTYPE
 	NStatement *stmt;
 	NIdentifier *ident;
 	NVariableDeclaration *var_decl;
-	std::vector<NVariableDeclaration*> *varvec;
-	std::vector<NExpression*> *exprvec;
+	std::vector<NVariableDeclaration *> *var_vector;
+	std::vector<NExpression *> *expr_vector;
 	std::string *string;
 	int token;
 }
