@@ -49,17 +49,15 @@
 %left TMUL TDIV
 
 
-%start program /* The start symbol/production */
+%start program
 
 %%
 
-program	: stmts { programBlock = $1; }
+program : stmts { programBlock = $1; }
 		;
 
-/* The first production creates an NBlock as its root node, then pushes the statement onto its stmt list vector */
-
-stmts	: stmt { $$ = new NBlock(); $$->statements.push_back($<stmt>1);}
-		| stmts stmt { $1->statements.push_back($<stmt>2); } /* adds stmt to the block $1 */
+stmts : stmt { $$ = new NBlock(); $$->statements.push_back($<stmt>1);}
+		| stmts stmt { $1->statements.push_back($<stmt>2); }
 		;
 		
 stmt	: var_decl | func_decl
