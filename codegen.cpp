@@ -10,9 +10,9 @@ void CodeGenContext::generateCode(NBlock &root) {
 	std::cout << "Generating code...\n";
 	
 	// Create the top level interpreter function to call as entry
-	vector<const Type*> argTypes;
-	FunctionType *ftype = FunctionType::get(Type::getVoidTy(getGlobalContext()), argTypes, false);
-	mainFunction = Function::Create::(ftype, GlobalValue::InternalLinkage, "main", module);
+	vector<Type*> argTypes;
+	FunctionType *ftype = FunctionType::get(Type::getVoidTy(getGlobalContext()), makeArrayRef(argTypes), false);
+	mainFunction = Function::Create(ftype, GlobalValue::InternalLinkage, "main", module);
 	BasicBlock *bblock = BasicBlock::Create(getGlobalContext(), "entry", mainFunction, 0);
 	
 	
@@ -33,8 +33,7 @@ void CodeGenContext::generateCode(NBlock &root) {
 // Executes the AST by running the main function
 GenericValue CodeGenContext::runCode() {
 	std::cout << "Running code...\n";
-	ExistingModuleProvider *mp = new ExistingModuleProvider(module);
-	ExecutionEngine *ee = ExecutionEngine::create(mp, false);
+	ExecutionEngine *ee = EngineBuilder(module).create();
 	vector<GenericValue> noargs;
 	GenericValue v = ee->runFunction(mainFunction, noargs);
 	std::cout << "Code was run...\n";
@@ -43,7 +42,7 @@ GenericValue CodeGenContext::runCode() {
 
 
 // Returns an LLVM type based on the identifier
-static const Type *typeOf(const NIdentifier& type) {
+static Type *typeOf(const NIdentifier& type) {
 	if (type.name.compare("int") == 0) {
 		return Type::getInt64Ty(getGlobalContext());
 	} else if (type.name.compare("double") == 0) {
@@ -85,10 +84,10 @@ Value* NMethodCall::codeGen(CodeGenContext &context) {
 	}
 	std::vector<Value *> args;
 	ExpressionList::const_iterator it;
-	for (it = arguments.begin(); it != arguements.end(); it++) {
+	for (it = arguments.begin(); it != arguments.end(); it++) {
 		args.push_back((**it).codeGen(context));
 	}
-	CallInst *call = CallInst::Create(function, args.begin(), args.end(),"", context.getCurrentBlock());
+	CallInst *call = CallInst::Create(function, makeArrayRef(args),"", context.currentBlock());
 	std::cout << "Creating method call: " << id.name << std::endl;
 	return call;
 }
@@ -152,12 +151,12 @@ Value* NVariableDeclaration::codeGen(CodeGenContext &context) {
 
 
 Value* NFunctionDeclaration::codeGen(CodeGenContext &context) {
-	vector<const Type*> argTypes;
+	vector<Type*> argTypes;
 	VariableList::const_iterator it;
 	for (it = arguments.begin(); it != arguments.end(); it++) {
 		argTypes.push_back(typeOf((**it).type));
 	}
-	FunctionType *ftype = FunctionType::get(typeOf(type), argTypes, false);
+	FunctionType *ftype = FunctionType::get(typeOf(type), makeArrayRef(argTypes), false);
 	Function *function = Function::Create(ftype, GlobalValue::InternalLinkage, id.name.c_str(), context.module);
 	BasicBlock *bblock = BasicBlock::Create(getGlobalContext(), "entry", function, 0);
 	

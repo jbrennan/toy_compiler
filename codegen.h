@@ -1,4 +1,5 @@
 #include <stack>
+#include <typeinfo>
 #include <llvm/Module.h>
 #include <llvm/Function.h>
 #include <llvm/Type.h>
@@ -10,13 +11,12 @@
 #include <llvm/Bitcode/ReaderWriter.h>
 #include <llvm/Analysis/Verifier.h>
 #include <llvm/Assembly/PrintModulePass.h>
-#include <llvm/Support/IRBuilder.h>
-#include <llvm/ModuleProvider.h>
+#include <llvm/IRBuilder.h>
 #include <llvm/ExecutionEngine/GenericValue.h>
 #include <llvm/ExecutionEngine/JIT.h>
 #include <llvm/Support/raw_ostream.h>
 
-using namespeace llvm;
+using namespace llvm;
 
 class NBlock;
 
@@ -56,4 +56,4 @@ public:
 		blocks.pop();
 		delete top;
 	}
-}
+};
