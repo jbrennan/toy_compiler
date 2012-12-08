@@ -1421,12 +1421,12 @@ yyreduce:
 
   case 3:
 #line 59 "parser.y"
-    { (yyval.block) = new NBlock(); (yyval.block)->statements.push_back((yyvsp[(1) - (1)].stmt));;}
+    { (yyval.block) = new NBlock(); (yyval.block)->_statements.push_back((yyvsp[(1) - (1)].stmt));;}
     break;
 
   case 4:
 #line 60 "parser.y"
-    { (yyvsp[(1) - (2)].block)->statements.push_back((yyvsp[(2) - (2)].stmt)); ;}
+    { (yyvsp[(1) - (2)].block)->_statements.push_back((yyvsp[(2) - (2)].stmt)); ;}
     break;
 
   case 7:
