@@ -25,7 +25,7 @@
 	This should match our tokens.l lex file.
 	We also define the node type they represent.
 */
-%token <string> TIDENTIFIER TINTEGER TDOUBLE
+%token <string> TIDENTIFIER TINTEGER TDOUBLE TYES TNO
 %token <token> TCEQ TCNE TCLT TCLE TCGT TCGE TEQUAL
 %token <token> TLPAREN TRPAREN TLBRACE TRBRACE TCOMMA TDOT
 %token <token> TPLUS TMINUS TMUL TDIV
@@ -37,7 +37,7 @@
 	It makes the compiler happy.
 */
 %type <ident> ident
-%type <expr> numeric expr
+%type <expr> numeric boolean expr
 %type <var_vector> func_decl_args
 %type <expr_vector> call_args
 %type <block> program stmts block
@@ -86,11 +86,16 @@ ident	: TIDENTIFIER { $$ = new NIdentifier(*$1); delete $1; }
 numeric	: TINTEGER { $$ = new NInteger(atol($1->c_str())); delete $1; }
 		| TDOUBLE { $$ = new NDouble(atof($1->c_str())); delete $1; }
 		;
+
+boolean : TYES { $$ = new NBoolean(true); }
+		| TNO { $$ = new NBoolean(false); }
+		;
 		
 expr	: ident TEQUAL expr { $$ = new NAssignment(*$<ident>1, *$3); }
 		| ident TLPAREN call_args TRPAREN { $$ = new NMethodCall(*$1, *$3); delete $3; }
 		| ident { $<ident>$ = $1; } /* just an identifier by itself */
 		| numeric
+		| boolean
 		| expr TMUL expr { $$ = new NBinaryOperator(*$1, $2, *$3); }
 		| expr TDIV expr { $$ = new NBinaryOperator(*$1, $2, *$3); }
 		| expr TPLUS expr { $$ = new NBinaryOperator(*$1, $2, *$3); }

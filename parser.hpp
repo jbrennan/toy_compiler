@@ -42,46 +42,50 @@
      TIDENTIFIER = 258,
      TINTEGER = 259,
      TDOUBLE = 260,
-     TCEQ = 261,
-     TCNE = 262,
-     TCLT = 263,
-     TCLE = 264,
-     TCGT = 265,
-     TCGE = 266,
-     TEQUAL = 267,
-     TLPAREN = 268,
-     TRPAREN = 269,
-     TLBRACE = 270,
-     TRBRACE = 271,
-     TCOMMA = 272,
-     TDOT = 273,
-     TPLUS = 274,
-     TMINUS = 275,
-     TMUL = 276,
-     TDIV = 277
+     TYES = 261,
+     TNO = 262,
+     TCEQ = 263,
+     TCNE = 264,
+     TCLT = 265,
+     TCLE = 266,
+     TCGT = 267,
+     TCGE = 268,
+     TEQUAL = 269,
+     TLPAREN = 270,
+     TRPAREN = 271,
+     TLBRACE = 272,
+     TRBRACE = 273,
+     TCOMMA = 274,
+     TDOT = 275,
+     TPLUS = 276,
+     TMINUS = 277,
+     TMUL = 278,
+     TDIV = 279
    };
 #endif
 /* Tokens.  */
 #define TIDENTIFIER 258
 #define TINTEGER 259
 #define TDOUBLE 260
-#define TCEQ 261
-#define TCNE 262
-#define TCLT 263
-#define TCLE 264
-#define TCGT 265
-#define TCGE 266
-#define TEQUAL 267
-#define TLPAREN 268
-#define TRPAREN 269
-#define TLBRACE 270
-#define TRBRACE 271
-#define TCOMMA 272
-#define TDOT 273
-#define TPLUS 274
-#define TMINUS 275
-#define TMUL 276
-#define TDIV 277
+#define TYES 261
+#define TNO 262
+#define TCEQ 263
+#define TCNE 264
+#define TCLT 265
+#define TCLE 266
+#define TCGT 267
+#define TCGE 268
+#define TEQUAL 269
+#define TLPAREN 270
+#define TRPAREN 271
+#define TLBRACE 272
+#define TRBRACE 273
+#define TCOMMA 274
+#define TDOT 275
+#define TPLUS 276
+#define TMINUS 277
+#define TMUL 278
+#define TDIV 279
 
 
 
@@ -102,7 +106,7 @@ typedef union YYSTYPE
 	int token;
 }
 /* Line 1529 of yacc.c.  */
-#line 106 "parser.hpp"
+#line 110 "parser.hpp"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

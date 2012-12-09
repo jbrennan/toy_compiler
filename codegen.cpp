@@ -47,6 +47,8 @@ static Type *typeOf(const NIdentifier& type) {
 		return Type::getInt64Ty(getGlobalContext());
 	} else if (type._name.compare("double") == 0) {
 		return Type::getDoubleTy(getGlobalContext());
+	} else if (type._name.compare("bool") == 0) {
+		return Type::getInt1Ty(getGlobalContext());
 	}
 	
 	return Type::getVoidTy(getGlobalContext());
@@ -64,6 +66,12 @@ Value* NInteger::codeGen(CodeGenContext &context) {
 Value* NDouble::codeGen(CodeGenContext &context) {
 	std::cout << "Creating double: " << _value << std::endl;
 	return ConstantFP::get(Type::getDoubleTy(getGlobalContext()), _value);
+}
+
+
+Value* NBoolean::codeGen(CodeGenContext &context) {
+	std::cout << "Creating boolean: " << _value << std::endl;
+	return _value? ConstantInt::getTrue(getGlobalContext()) : ConstantInt::getFalse(getGlobalContext());
 }
 
 
@@ -95,18 +103,36 @@ Value* NMethodCall::codeGen(CodeGenContext &context) {
 
 Value* NBinaryOperator::codeGen(CodeGenContext &context) {
 	std::cout << "Creating binary operation " << _op << std::endl;
-	Instruction::BinaryOps instr;
+	Instruction::BinaryOps instr = Instruction::BinaryOpsEnd;
 	switch (_op) {
 		case TPLUS:		instr = Instruction::Add; break;
 		case TMINUS:	instr = Instruction::Sub; break;
 		case TMUL:		instr = Instruction::Mul; break;
 		case TDIV:		instr = Instruction::SDiv; break;
-		default: return NULL;
+		
+		default: break;
 		
 		// TODO: Comparison
 	}
 	
-	return BinaryOperator::Create(instr, _lhs.codeGen(context), _rhs.codeGen(context), "", context.currentBlock());
+	if (instr != Instruction::BinaryOpsEnd) {
+		return BinaryOperator::Create(instr, _lhs.codeGen(context), _rhs.codeGen(context), "", context.currentBlock());
+	}
+	
+	// Try to see if _op is a comparison
+	CmpInst::Predicate predicate;
+	switch (_op) {
+		case TCEQ: predicate = CmpInst::ICMP_EQ ; break;
+		case TCNE: predicate = CmpInst::ICMP_NE ; break;
+		case TCLT: predicate = CmpInst::ICMP_SLT ; break;
+		case TCLE: predicate = CmpInst::ICMP_SLE ; break;
+		case TCGT: predicate = CmpInst::ICMP_SGT ; break;
+		case TCGE: predicate = CmpInst::ICMP_SGE ; break;
+		
+		default: return NULL;
+	}
+	BasicBlock *bblock = context.currentBlock();
+	return new ICmpInst::ICmpInst((*bblock), predicate, _lhs.codeGen(context), _rhs.codeGen(context), "");
 }
 
 

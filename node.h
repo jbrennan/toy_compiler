@@ -38,6 +38,13 @@ public:
 	virtual llvm::Value* codeGen(CodeGenContext& context);
 };
 
+class NBoolean : public NExpression {
+public:
+	bool _value;
+	NBoolean(bool value) : _value(value) {}
+	virtual llvm::Value* codeGen(CodeGenContext& context);
+};
+
 
 class NIdentifier : public NExpression {
 public:
