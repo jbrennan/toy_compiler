@@ -26,6 +26,7 @@
 	We also define the node type they represent.
 */
 %token <string> TIDENTIFIER TINTEGER TDOUBLE TYES TNO
+%token <string> TIF TELSE
 %token <token> TCEQ TCNE TCLT TCLE TCGT TCGE TEQUAL
 %token <token> TLPAREN TRPAREN TLBRACE TRBRACE TCOMMA TDOT
 %token <token> TPLUS TMINUS TMUL TDIV
@@ -60,7 +61,7 @@ stmts : stmt { $$ = new NBlock(); $$->_statements.push_back($<stmt>1);}
 		| stmts stmt { $1->_statements.push_back($<stmt>2); }
 		;
 		
-stmt	: var_decl | func_decl
+stmt	: var_decl | func_decl | if_statement
 		| expr { $$ = new NExpressionStatement(*$1); }
 		;
 
@@ -74,7 +75,9 @@ var_decl	: ident ident { $$ = new NVariableDeclaration(*$1, *$2); }
 			
 func_decl	: ident ident TLPAREN func_decl_args TRPAREN block { $$ = new NFunctionDeclaration(*$1, *$2, *$4, *$6); delete $4;}
 			;
-			
+
+if_statement	: TIF TLPAREN expr TRPAREN block /* `if (thing) { // } */ { $$ = new NIfStatement($3, *$5);}
+
 func_decl_args	: /*blank*/ { $$ = new VariableList(); }
 				| var_decl { $$ = new VariableList(); $$->push_back($<var_decl>1); }
 				| func_decl_args TCOMMA var_decl { $1->push_back($<var_decl>3); }

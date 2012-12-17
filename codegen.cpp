@@ -199,3 +199,8 @@ Value* NFunctionDeclaration::codeGen(CodeGenContext &context) {
 	std::cout << "Creating function " << _id._name << std::endl;
 	return function;
 }
+
+
+Value* NIfStatement::codeGen(CodeGenContext &context) {
+	
+}

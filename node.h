@@ -117,3 +117,13 @@ public:
 	NFunctionDeclaration(const NIdentifier& type, const NIdentifier& id, const VariableList& arguments, NBlock& block) : _type(type), _id(id), _arguments(arguments), _block(block) {}
 	virtual llvm::Value* codeGen(CodeGenContext& context);
 };
+
+
+class NIfStatement : public NStatement {
+public:
+	NExpression *_condition;
+	NBlock& _block;
+	
+	NIfStatement(NExpression *condition, NBlock &block) : _condition(condition), _block(block) {}
+	virtual llvm::Value* codeGen(CodeGenContext& context);
+}

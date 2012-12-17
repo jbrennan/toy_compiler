@@ -10,6 +10,8 @@
 %%
 
 [ \t\n]					;
+if 						return TOKEN(TIF);
+else					return TOKEN(TELSE);
 yes						return TOKEN(TYES);
 no						return TOKEN(TNO);
 [a-zA-Z_][a-zA-Z0-9_]*	SAVE_TOKEN; return TIDENTIFIER;
